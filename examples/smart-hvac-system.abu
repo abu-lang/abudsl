@@ -31,7 +31,7 @@ rule cool on temperature
 rule warm on temperature
     for (this.temperature > 27) do this.heating = false
 
-rule dry on humidity; temperature
+rule dry on humidity temperature
     for (2 + 0.5 * this.temperature < this.humidity and 38 - this.temperature < this.humidity)
         do this.conditioning = true
 

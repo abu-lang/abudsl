@@ -12,7 +12,7 @@ In the following, we denote with **(** *exp* **)*** zero or more repetitions of 
   &emsp;&emsp;&emsp; **|**&nbsp; `rule` *RuleId* `on` *Event* `default` *Action* **(** *Task* **)*** <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `rule` *RuleId* `on` *Event* `for` **[** `all` **]** *Condition* `do` *Action* `owise` *Action* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `rule` *RuleId* `on` *Event* `let` *LetDeclaration* `in` **(** *Task* **)<sup>+</sup>** <br>
-*Event* &nbsp;**::=**&nbsp; *ResourceId* **(** `;` *ResourceId* **)*** <br>
+*Event* &nbsp;**::=**&nbsp; **(** *ResourceId* **)<sup>+</sup>** <br>
 *Task* &nbsp;**::=**&nbsp; `for` **[** `all` **]** *Condition* `do` *Action* <br>
 *Action* &nbsp;**::=**&nbsp; *Assignment* **(** `;` *Assignment* **)*** <br>
 *Assignment* &nbsp;**::=**&nbsp; **[** `this.` **]** *ResourceId* `=` *Expression* **|** `ext.` *ResourceId* `=` *Expression* <br>
@@ -36,10 +36,12 @@ In the following, we denote with **(** *exp* **)*** zero or more repetitions of 
 *NumericExpression* &nbsp;**::=**&nbsp; *NumericValue* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; **[** `this.` **]** *ResourceId* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `(` *NumericExpression* `)` <br>
+  &emsp;&emsp;&emsp; **|**&nbsp; `abs` *NumericExpression* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *NumericExpression* `+` *NumericExpression* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *NumericExpression* `-` *NumericExpression* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *NumericExpression* `*` *NumericExpression* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *NumericExpression* `/` *NumericExpression* <br>
+  &emsp;&emsp;&emsp; **|**&nbsp; *NumericExpression* `%` *NumericExpression* <br>
 *StringExpression* &nbsp;**::=**&nbsp; *StringValue* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *Identifier* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *StringExpression* `::` *StringExpression* <br>

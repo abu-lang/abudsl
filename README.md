@@ -63,7 +63,7 @@ hvac : "An HVAC control system" {
 where the lines after the keyword `#` are comments.
 
 #### Expressions
-In the basic syntax of `abudsl`, an *Expression* can be a *BooleanExpression*, a *NumericExpression* or a *StringExpression*. The definition of expressions is standard and it comprises: boolean operators, like `not` (negation), `and` (conjunction), `or` (disjunction); arithmetic and string operators, like `+` (addition), `-` (subtraction), `*` (multiplication), `/` (division), `::` (concatenation); and comparison operators, like `==` (equal), `!=` (not equal), `<` (less than), `<=` (less than or equal), `>` (greater than), `>=` (greater than or equal). The standard operators composition priority can be overridden by using left `(` and right `)` round brackets.
+In the basic syntax of `abudsl`, an *Expression* can be a *BooleanExpression*, a *NumericExpression* or a *StringExpression*. The definition of expressions is standard and it comprises: boolean operators, like `not` (negation), `and` (conjunction), `or` (disjunction); arithmetic and string operators, like `abs` (absolute value), `+` (addition), `-` (subtraction), `*` (multiplication), `/` (division), `%` (modulo), `::` (concatenation); and comparison operators, like `==` (equal), `!=` (not equal), `<` (less than), `<=` (less than or equal), `>` (greater than), `>=` (greater than or equal). The standard operators composition priority can be overridden by using left `(` and right `)` round brackets.
 
 The detailed grammar of expressions can be found [here](/docs/abudsl-grammar.md#syntax-for-expressions-and-conditions).
 
@@ -84,9 +84,9 @@ means that the device `hvac` can be affected by the ECA rules named `cool`, `war
 An ECA ***rule*** is of the form:
 > `rule` *RuleId* `on` *Event* **(** *Task* **)<sup>+</sup>**
 
-where *RuleId* is the name of the rule; *Event* is a semicolon-separated list of resources on which the rule is waiting for changes; and **(** *Task* **)<sup>+</sup>** is a non-empty list of tasks that may be activated when a resource in *Event* changes. Rule names and resources are alphanumeric strings. For instance:
+where *RuleId* is the name of the rule; *Event* is a non-empty space-separated list of resources on which the rule is waiting for changes; and **(** *Task* **)<sup>+</sup>** is a non-empty list of tasks that may be activated when a resource in *Event* changes. Rule names and resources are alphanumeric strings. For instance:
 ```
-rule dry on humidity; temperature
+rule dry on humidity temperature
 ```
 is a rule named `dry` that is waiting for changes in the resources `humidity` and `temperature`.
 
@@ -102,7 +102,7 @@ is a task that turns on the conditioning system (doing `conditionig = true`) whe
 
 The full code of the `dry` rule is then the following:
 ```
-rule dry on humidity; temperature
+rule dry on humidity temperature
     for (2 + 0.5 * temperature < humidity and 38 - temperature < humidity)
         do conditioning = true
 ```
@@ -125,13 +125,13 @@ To easy the programming of ECA rules, `abudsl` provides the following ***rule ab
 
 In a ***Default*** rule the assignments in *Action* are always executed when *Event* happens, independently from tasks condition. In a ***IfElse*** rule the action after `do` is performed when *Condition* is true, while the action after `owise` is performed when  *Condition* is false. Finally, in a ***Let*** rule the substitutions in *LetDeclaration* are applied inside the non-empty list of tasks **(** *Task* **)<sup>+</sup>**. In particular, *LetDeclaration* is a semicolon-separated list of substitutions from expressions to resources. For instance, the rule
 ```
-rule stupidCalculatorLet on x; y
+rule stupidCalculatorLet on x y
     let sum := (x + y); diff := (x - y) in
     for (sum > 0) do result = sum * diff
 ```
 is equivalent to the following:
 ```
-rule stupidCalculator on x; y
+rule stupidCalculator on x y
     for ((x + y) > 0) do result = (x + y) * (x - y)
 ```
 
