@@ -1,0 +1,48 @@
+# AbU devices definition.
+
+hvac : "An HVAC control system" {
+    physical output boolean heating = false
+    physical output boolean conditioning = false
+    logical integer temperature = 0
+    logical integer humidity = 0
+    physical input boolean airButton
+    logical string node = "hvac"
+  where not (conditioning and heating)
+} has cool warm dry stopAir
+
+tempSens : "A temperature sensor" {
+    physical input integer temperature
+    logical string node = "tempSens"
+} has notifyTemp
+
+humSens : "A humidity sensor" {
+    physical input integer humidity
+    logical string node = "humSens"
+} has notifyHum
+
+\@
+    AbU (ECA) rules definition.
+    Rules can be referenced by multiple devices.
+@\
+
+rule cool on temperature
+    for (this.temperature < 18) do this.heating = true
+
+rule warm on temperature
+    for (this.temperature > 27) do this.heating = false
+
+rule dry on humidity; temperature
+    for (2 + 0.5 * this.temperature < this.humidity and 38 - this.temperature < this.humidity)
+        do this.conditioning = true
+
+rule stopAir on airButton
+    for (this.airButton) do this.conditioning = false
+
+rule notifyTemp on temperature
+    for all (ext.node == "hvac")
+        do ext.temperature = this.temperature
+
+rule notifyHum on humidity
+    for all (ext.node == "hvac")
+        do ext.humidity = this.humidity
+
