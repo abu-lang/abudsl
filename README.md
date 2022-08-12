@@ -65,7 +65,7 @@ where the lines after the keyword `#` are comments.
 #### Expressions
 In the basic syntax of `abudsl`, an *Expression* can be a *BooleanExpression*, a *NumericExpression* or a *StringExpression*. The definition of expressions is standard and it comprises: boolean operators, like `not` (negation), `and` (conjunction), `or` (disjunction); arithmetic and string operators, like `+` (addition), `-` (subtraction), `*` (multiplication), `/` (division), `::` (concatenation); and comparison operators, like `==` (equal), `!=` (not equal), `<` (less than), `<=` (less than or equal), `>` (greater than), `>=` (greater than or equal). The standard operators composition priority can be overridden by using left `(` and right `)` round brackets.
 
-The detailed grammar of expressions can be found [here](/docs/DSL.md).
+The detailed grammar of expressions can be found [here](/docs/abudsl-grammar.md#syntax-for-expressions-and-conditions).
 
 #### Referencing rules
 As said at the beginning, devices are programmed by means of ECA rules acting on them. A rule can act on multiple devices and a device can be influenced by multiple rules. Hence, each device is suffixed by a list of *RuleId*, namely rule names, after the (optional) keyword `has`. For instance:
