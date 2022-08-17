@@ -130,9 +130,23 @@ is a rule that updates the temperature of external devices with the temperature 
 
 #### Special rules
 To easy the programming of ECA rules, `abudsl` provides the following ***rule abstractions***.
->***Default*** &nbsp;&nbsp; `rule` *RuleId* `on` *Event* `default` *Action* **(** *Task* **)*** <br>
- ***IfElse*** &nbsp;&nbsp; `rule` *RuleId* `on` *Event* `for` **[** `all` **]** *Condition* `do` *Action* `owise` *Action* <br>
- ***Let*** &nbsp;&nbsp; `rule` *RuleId* `on` *Event* `let` *LetDeclaration* `in` **(** *Task* **)<sup>+</sup>**
+>***Default Rule*** <br>
+`rule` *RuleId* <br>
+    &emsp;&emsp;`on` *Event* `default` *Action* <br>
+    &emsp;&emsp;**(** *Task* **)***
+
+>***IfElse Rule*** <br>
+`rule` *RuleId* <br>
+    &emsp;&emsp;`on` *Event* <br>
+    &emsp;&emsp;`for` **[** `all` **]** *Condition* <br>
+        &emsp;&emsp;&emsp;&emsp;`do` *Action* <br>
+        &emsp;&emsp;&emsp;&emsp;`owise` *Action*
+
+>***Let Rule*** <br>
+`rule` *RuleId* <br>
+    &emsp;&emsp;`on` *Event* <br>
+    &emsp;&emsp;&emsp;`let` *LetDeclaration* `in` <br>
+    &emsp;&emsp;**(** *Task* **)<sup>+</sup>**
 
 In a ***Default*** rule the assignments in *Action* are always executed when *Event* happens, independently from tasks condition. In a ***IfElse*** rule the action after `do` is performed when *Condition* is true, while the action after `owise` is performed when  *Condition* is false. Finally, in a ***Let*** rule the substitutions in *LetDeclaration* are applied inside the non-empty list of tasks **(** *Task* **)<sup>+</sup>**. In particular, *LetDeclaration* is a semicolon-separated list of substitutions from expressions to resources. For instance, the rule
 ```
