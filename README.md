@@ -23,7 +23,10 @@ An `abudsl` program consists in a non-empty list of (IoT) devices, equipped with
 
 ### Devices
 A ***device*** is of the form:
-> *DeviceId* `:` *Description* `{` *ResourceDeclaration* **[** `where` *BooleanExpression* **]** `}`
+> *DeviceId* `:` *Description* `{` <br>
+      &emsp;&emsp;*ResourceDeclaration* <br>
+    &emsp;**[** `where` *BooleanExpression* **]** <br>
+  `}`
 
 where *DeviceId* is the name of the device (an alphanumeric string); *Description* is a quoted string describing the device functionality; and *ResourceDeclaration* is a non-empty list of resource (sensors, actuators and internal variables) declarations. A resource can be physical or logical.
 
@@ -56,8 +59,9 @@ hvac : "An HVAC control system" {
     logical integer humidity = 0
     physical input boolean airButton
     logical string node = "hvac"
+  where
     # Device invariant.
-    where not (conditioning and heating)
+    not (conditioning and heating)
 }
 ```
 where the lines after the keyword `#` are comments.
@@ -74,24 +78,29 @@ hvac : "An HVAC control system" {
     # Resources declaration.
     ...
     logical string node = "hvac"
+  where
     # Device invariant.
-    where not (conditioning and heating)
+    not (conditioning and heating)
 } has cool warm dry stopAir
 ```
 means that the device `hvac` can be affected by the ECA rules named `cool`, `warm`, `dry` and `stopAir`. Note that, the list of rules is optional since a device may not have specific rules acting on it (for instance, when an actuator can only be changed by external devices but its does not impact any other device).
 
 ### ECA rules
 An ECA ***rule*** is of the form:
-> `rule` *RuleId* `on` *Event* **(** *Task* **)<sup>+</sup>**
+> `rule` *RuleId* <br>
+      &emsp;&emsp;`on` *Event* <br>
+      &emsp;&emsp;**(** *Task* **)<sup>+</sup>**
 
 where *RuleId* is the name of the rule; *Event* is a non-empty space-separated list of resources on which the rule is waiting for changes; and **(** *Task* **)<sup>+</sup>** is a non-empty list of tasks that may be activated when a resource in *Event* changes. Rule names and resources are alphanumeric strings. For instance:
 ```
-rule dry on humidity temperature
+rule dry
+    on humidity temperature
 ```
 is a rule named `dry` that is waiting for changes in the resources `humidity` and `temperature`.
 
 An ECA rule ***task*** is of the form:
-> `for` **[** `all` **]** *Condition* `do` *Action*
+> `for` **[** `all` **]** *Condition* <br>
+      &emsp;&emsp;`do` *Action*
 
 where *Condition* is a boolean expression and *Action* is a list of semicolon-separated list of resource assignments. When *Condition* is satisfied, then the assignments in *Action* are performed. For instance:
 ```
@@ -102,7 +111,8 @@ is a task that turns on the conditioning system (doing `conditionig = true`) whe
 
 The full code of the `dry` rule is then the following:
 ```
-rule dry on humidity temperature
+rule dry
+    on humidity temperature
     for (2 + 0.5 * temperature < humidity and 38 - temperature < humidity)
         do conditioning = true
 ```
@@ -111,7 +121,8 @@ rule dry on humidity temperature
 
 ECA rule tasks may act on external devices, by using the (optional) modifier `all`. In this case, the condition and the action in the task may reference resources on external devices, by prefixing them with the `ext.` keyword. For instance:
 ```
-rule notifyTemp on temperature
+rule notifyTemp
+    on temperature
     for all (ext.node == "hvac")
         do ext.temperature = this.temperature
 ```
@@ -125,14 +136,18 @@ To easy the programming of ECA rules, `abudsl` provides the following ***rule ab
 
 In a ***Default*** rule the assignments in *Action* are always executed when *Event* happens, independently from tasks condition. In a ***IfElse*** rule the action after `do` is performed when *Condition* is true, while the action after `owise` is performed when  *Condition* is false. Finally, in a ***Let*** rule the substitutions in *LetDeclaration* are applied inside the non-empty list of tasks **(** *Task* **)<sup>+</sup>**. In particular, *LetDeclaration* is a semicolon-separated list of substitutions from expressions to resources. For instance, the rule
 ```
-rule stupidCalculatorLet on x y
-    let sum := (x + y); diff := (x - y) in
-    for (sum > 0) do result = sum * diff
+rule stupidCalculatorLet 
+    on x y
+      let sum := (x + y); diff := (x - y) in
+    for (sum > 0)
+        do result = sum * diff
 ```
 is equivalent to the following:
 ```
-rule stupidCalculator on x y
-    for ((x + y) > 0) do result = (x + y) * (x - y)
+rule stupidCalculator
+    on x y
+    for ((x + y) > 0)
+        do result = (x + y) * (x - y)
 ```
 
 ### Comments
