@@ -26,24 +26,32 @@ humSens : "A humidity sensor" {
     Rules can be referenced by multiple devices.
 @\
 
-rule cool on temperature
-    for (this.temperature < 18) do this.heating = true
+rule cool 
+    on temperature
+    for (this.temperature < 18)
+        do this.heating = true
 
-rule warm on temperature
-    for (this.temperature > 27) do this.heating = false
+rule warm
+    on temperature
+    for (this.temperature > 27) 
+        do this.heating = false
 
 rule dry 
     on humidity temperature
     for (2 + 0.5 * this.temperature < this.humidity and 38 - this.temperature < this.humidity)
-    do this.conditioning = true
+        do this.conditioning = true
 
-rule stopAir on airButton
-    for (this.airButton) do this.conditioning = false
+rule stopAir
+    on airButton
+    for (this.airButton) 
+        do this.conditioning = false
 
-rule notifyTemp on temperature
-    for all (ext.node == "hvac") do
-        ext.temperature = this.temperature
+rule notifyTemp 
+    on temperature
+    for all (ext.node == "hvac") 
+        do ext.temperature = this.temperature
 
-rule notifyHum on humidity
-    for all (ext.node == "hvac") do
-        ext.humidity = this.humidity
+rule notifyHum 
+    on humidity
+    for all (ext.node == "hvac") 
+        do ext.humidity = this.humidity
