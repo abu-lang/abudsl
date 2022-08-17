@@ -7,7 +7,8 @@ hvac : "An HVAC control system" {
     logical integer humidity = 0
     physical input boolean airButton
     logical string node = "hvac"
-  where not (conditioning and heating)
+  where
+    not (conditioning and heating)
 } has cool warm dry stopAir
 
 tempSens : "A temperature sensor" {
