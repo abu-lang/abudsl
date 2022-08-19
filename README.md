@@ -47,6 +47,8 @@ Each resource is declared with a name *ResourceId* (an alphanumeric string) and 
 - `decimal`, for decimal resources like `3.14` or `-3.14`
 - `string`, for (quoted) string resources like `"sTr1nG"`
 
+> **Strings format:** strings can contain spaces and special characters, like `_` (underscore), `\` (backslash), `#` (octothorpe) or `'` (single quote); but they cannot contain the double quote symbol `"`.
+
 Finally, a device can be equipped with an (optional) invariant, introduced after the keyword `where`. The invariant is a boolean expression that the device have to fulfill during execution (no updates violating the invariant are allowed).
 
 Here is a device full example (self-explanatory):
