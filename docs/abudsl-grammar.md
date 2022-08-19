@@ -63,12 +63,13 @@ In the following, we denote with **(** *exp* **)*** zero or more repetitions of 
 >*ResourceId* &nbsp;**::=**&nbsp; *Identifier* <br>
 *Identifier* &nbsp;**::=**&nbsp; *Character* **(** *Character* **|** *Digit* **)*** <br>
 *Character* &nbsp;**::=**&nbsp; `a` **|** `b` ... **|** `z` **|** `A` **|** `B` ... **|** `Z` <br>
+*SpecialCharacter* &nbsp;**::=**&nbsp; ` `&nbsp;**|** `!` **|** `#` **|** ... **|** `~` <br>
 *Digit* &nbsp;**::=**&nbsp; `0` **|** `1` **|** ... **|** `9` <br>
 *BooleanValue* &nbsp;**::=**&nbsp; `true` **|** `false` <br>
 *NumericValue* &nbsp;**::=**&nbsp; *IntegerValue* **|** *DecimalValue* <br>
 *IntegerValue* &nbsp;**::=**&nbsp; **[** `-` **]** **(** *Digit* **)<sup>+</sup>** <br>
 *DecimalValue* &nbsp;**::=**&nbsp; *IntegerValue* `.` **(** *Digit* **)<sup>+</sup>** <br>
-*StringValue* &nbsp;**::=**&nbsp; `"` **(** *Character* **|** *Digit* **)*** `"` <br>
+*StringValue* &nbsp;**::=**&nbsp; `"` **(** *Character* **|** *SpecialCharacter* **|** *Digit* **)*** `"` <br>
 *Type* &nbsp;**::=**&nbsp; `boolean` **|** `integer` **|** `decimal` **|** `string` <br>
 *DeviceId* &nbsp;**::=**&nbsp; *Identifier* <br>
 *Description* &nbsp;**::=**&nbsp; *StringValue* <br>
