@@ -1,0 +1,64 @@
+# AbU custom types declaration.
+
+define Coords as {
+    latitude : physical output decimal
+    longitude : physical output decimal
+}
+
+# AbU devices definition.
+
+droneA : "A robot taking measurements" {
+    physical input integer battery
+    Coords position = (latitude = 2.0, longitude = 2.0)
+    Coords help = (latitude = -1.0, longitude = -1.0)
+    logical string mode = "measure"
+    logical string node = "droneA"
+    logical decimal threshold = 7.0
+} has batteryCheck setRescue
+
+droneB : "A robot taking measurements" {
+    physical input integer battery
+    Coords position = (latitude = 12.0, longitude = 5.0)
+    Coords help = (latitude = -1.0, longitude = -1.0)
+    logical string mode = "measure"
+    logical string node = "droneB"
+    logical decimal threshold = 6.0
+} has batteryCheck setRescue
+
+droneC : "A robot taking measurements" {
+    physical input integer battery
+    Coords position = (latitude = 5.0, longitude = 2.0)
+    Coords help = (latitude = -1.0, longitude = -1.0)
+    logical string mode = "measure"
+    logical string node = "droneC"
+    logical decimal threshold = 7.0
+} has batteryCheck setRescue
+
+droneD : "A robot taking measurements" {
+    physical input integer battery
+    Coords position = (latitude = 5.0, longitude = 5.0)
+    Coords help = (latitude = -1.0, longitude = -1.0)
+    logical string mode = "measure"
+    logical string node = "droneD"
+    logical decimal threshold = 6.0
+} has batteryCheck setRescue
+
+\@
+    AbU (ECA) rules definition.
+    Rules can be referenced by multiple devices.
+@\
+
+rule batteryCheck
+    on battery
+    for all (battery < 5 and ext.battery > 80)
+        do ext.help[latitude] = position[latitude]; ext.help[longitude] = position[longitude
+
+rule setRescue 
+    on help[latitude] help[longitude]
+      let 
+        diffLatitude := (position[latitude] - help[latitude]);
+        diffLongitude := (position[longitude] - help[longitude])
+      in
+    for (absdec diffLatitude) < threshold and (absdec diffLongitude) < threshold
+        do mode = "rescue"
+
