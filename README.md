@@ -3,7 +3,7 @@ A Domain Specific Language (DSL) for the IoT.
 
 `abudsl` is a distributed language merging the programming simplicity prerogative of Event Condition Action (ECA) rules with a powerful (decentralized) communication and coordination mechanism based on attributes. The language exploits *Attribute-based memory Updates* and it has its roots in the *AbU calculus*[^1].
 
-[^1]: Marino Miculan and Michele Pasqua. "A Calculus for Attribute-Based Memory Updates". In Antonio Cerone and Peter Ölveczky, editors, Proceedings of the 18th international colloquium on theoretical aspects of computing, ICTAC 2021, volume 12819 of Lecture Notes in Computer Science. Springer, 2021.
+[^1]: Marino Miculan and Michele Pasqua. "A Calculus for Attribute-Based Memory Updates". In Antonio Cerone and Peter Ölveczky, editors, Proceedings of the 18<sup>th</sup> international colloquium on theoretical aspects of computing, ICTAC 2021, volume 12819 of Lecture Notes in Computer Science. Springer, 2021.
 
 ### Brief introduction
 
@@ -31,21 +31,23 @@ A ***device*** is of the form:
 where *DeviceId* is the name of the device (an alphanumeric string); *Description* is a quoted string describing the device functionality; and *ResourceDeclaration* is a non-empty list of resource (sensors, actuators and internal variables) declarations. A resource can be physical or logical.
 
 A ***physical resource*** declaration can be of the forms:
-> ***Input*** &nbsp;&nbsp; `physical input` *Type* *ResourceId* <br>
-  ***Output*** &nbsp;&nbsp; `physical output` *Type* *ResourceId* `=` *Expression*
+> ***Input*** &nbsp;&nbsp; `physical input` *PrimitiveType* *ResourceId* <br>
+  ***Output*** &nbsp;&nbsp; `physical output` *PrimitiveType* *ResourceId* `=` *Value*
 
 ***Input*** physical resources are used to model sensors; while ***Output*** pyshical resources are used to model actuators. The first, are supposed to be read-only; while the latter are supposed to be write-only.
 
 A ***logical resource*** declaration is of the form:
-> `logical` *Type* *ResourceId* `=` *Expression*
+> `logical` *PrimitiveType* *ResourceId* `=` *Value*
 
-and it is used to model internal device variables. This kind of resource does not have read/write constraints. Note that, logical and physical output resources have to be declared with an initialization *Expression*, while physical input resources do not.
+and it is used to model internal device variables. This kind of resource does not have read/write constraints. Note that, logical and physical output resources have to be declared with an initialization *Value*, while physical input resources do not.
 
-Each resource is declared with a name *ResourceId* (an alphanumeric string) and a type *Type*. In the basic syntax of `abudsl`, we have the following ***types***:
+Each resource is declared with a name *ResourceId* (an alphanumeric string) and a (primitive) type *PrimitiveType*. In the basic syntax of `abudsl`, we have the following ***primitive types***:
 - `boolean`, for boolean resources like `true` or `false`
 - `integer`, for integer resources like `42` or `-42`
 - `decimal`, for decimal resources like `3.14` or `-3.14`
 - `string`, for (quoted) string resources like `"sTr1nG"`
+
+Elements in *Value* belong to primitive types, hence we can have: a *BooleanValue*, with type `boolean`; a *IntegerValue*, with type `integer`; a *DecimalValue*, with type `decimal`; and a *StringValue*, with type `string`.
 
 > **Strings format:** strings can contain spaces and special characters, like `_` (underscore), `\` (backslash), `#` (octothorpe) or `'` (single quote); but they cannot contain the double quote symbol `"`.
 
@@ -68,10 +70,36 @@ hvac : "An HVAC control system" {
 ```
 where the lines after the keyword `#` are comments.
 
-#### Expressions
-In the basic syntax of `abudsl`, an *Expression* can be a *BooleanExpression*, a *NumericExpression* or a *StringExpression*. The definition of expressions is standard and it comprises: boolean operators, like `not` (negation), `and` (conjunction), `or` (disjunction); arithmetic and string operators, like `abs` (absolute value), `+` (addition), `-` (subtraction), `*` (multiplication), `/` (division), `%` (modulo), `::` (concatenation); and comparison operators, like `==` (equal), `!=` (not equal), `<` (less than), `<=` (less than or equal), `>` (greater than), `>=` (greater than or equal). The standard operators composition priority can be overridden by using left `(` and right `)` round brackets.
+#### Compound resources
 
-The detailed grammar of expressions can be found [here](/docs/abudsl-grammar.md#syntax-for-expressions-and-conditions).
+In `abudsl` it is also possible to define custom types, in order to use compound resources (something like objects). They are defined by means of a (possibly empty) list of ***type declarations***:
+> `define` *CompoundType* `as {` <br>
+   &emsp;&emsp; *FieldDeclaration* <br>
+  `}`
+
+where *CompoundType* is an an alphanumeric string (the new type identifier) and *FieldDeclaration* is a non-empty list of ***field declarations*** of the form:
+> *ResourceId* `:` **(** `physical input` *PrimitiveType* **|** `physical output` *PrimitiveType* **|** `logical` *PrimitiveType* **)**
+
+Here is an example of type declaration (self-explanatory):
+```
+define GPIOButton as {
+    pin : physical output integer
+    status : logical boolean
+}
+```
+
+Compound types are instantiated and initialized when declared in a device. This is done by using an anonymous constructor taking as parameter a possibly empty list of fields that need to be initialized. Hence, a ***constructor*** is of the form:
+> `(` **[** *ResourceId* `=` *Value* **(** `,` *ResourceId* `=` *Value* **)*** **]** `)`
+
+For instance, to instantiate the compound type `GPIOButton` we can insert the following resource declaration:
+```
+GPIOButton button = (pin = 38, status = false)
+```
+
+To access a compound resource field in expressions, we use a double brackets notation *à la* Python. For instance, to access the field `pin` of the compound resource `button` having type `GPIOButton` we can use:
+```
+button[pin]
+```
 
 #### Referencing rules
 As said at the beginning, devices are programmed by means of ECA rules acting on them. A rule can act on multiple devices and a device can be influenced by multiple rules. Hence, each device is suffixed by a list of *RuleId*, namely rule names, after the (optional) keyword `has`. For instance:
@@ -152,7 +180,7 @@ To easy the programming of ECA rules, `abudsl` provides the following ***rule ab
 
 In a ***Default*** rule the assignments in *Action* are always executed when *Event* happens, independently from tasks condition. In a ***IfElse*** rule the action after `do` is performed when *Condition* is true, while the action after `owise` is performed when  *Condition* is false. Finally, in a ***Let*** rule the substitutions in *LetDeclaration* are applied inside the non-empty list of tasks **(** *Task* **)<sup>+</sup>**. In particular, *LetDeclaration* is a semicolon-separated list of substitutions from expressions to resources. For instance, the rule
 ```
-rule stupidCalculatorLet 
+rule stupidCalculatorLet
     on x y
       let sum := (x + y); diff := (x - y) in
     for (sum > 0)
@@ -165,6 +193,11 @@ rule stupidCalculator
     for ((x + y) > 0)
         do result = (x + y) * (x - y)
 ```
+
+#### Expressions
+In the basic syntax of `abudsl`, an *Expression* can be a *BooleanExpression*, a *NumericExpression* or a *StringExpression*. The definition of expressions is standard and it comprises: boolean operators, like `not` (negation), `and` (conjunction), `or` (disjunction); arithmetic and string operators, like `absint` (absolute value for integers), `absdec` (absolute value for decimals), `+` (addition), `-` (subtraction), `*` (multiplication), `/` (division), `%` (modulo), `::` (concatenation); and comparison operators, like `==` (equal), `!=` (not equal), `<` (less than), `<=` (less than or equal), `>` (greater than), `>=` (greater than or equal). The standard operators composition priority can be overridden by using left `(` and right `)` round brackets.
+
+The detailed grammar of expressions can be found [here](/docs/abudsl-grammar.md#syntax-for-expressions-and-conditions).
 
 ### Comments
 Inline comments start with a `#`:
