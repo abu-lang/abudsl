@@ -1,46 +1,46 @@
 # AbU custom types declaration.
 
 define Coords as {
-    latitude : physical output decimal
-    longitude : physical output decimal
+    latitude : physical output integer
+    longitude : physical output integer
 }
 
 # AbU devices definition.
 
 droneA : "A robot taking measurements" {
     physical input integer battery
-    Coords position = (latitude = 2.0, longitude = 2.0)
-    Coords help = (latitude = -1.0, longitude = -1.0)
+    Coords position = (latitude = 2, longitude = 2)
+    Coords help = (latitude = -1, longitude = -1)
     logical string mode = "measure"
     logical string node = "droneA"
-    logical decimal threshold = 7.0
+    logical integer threshold = 7
 } has batteryCheck setRescue
 
 droneB : "A robot taking measurements" {
     physical input integer battery
-    Coords position = (latitude = 12.0, longitude = 5.0)
-    Coords help = (latitude = -1.0, longitude = -1.0)
+    Coords position = (latitude = 12, longitude = 5)
+    Coords help = (latitude = -1, longitude = -1)
     logical string mode = "measure"
     logical string node = "droneB"
-    logical decimal threshold = 6.0
+    logical integer threshold = 6
 } has batteryCheck setRescue
 
 droneC : "A robot taking measurements" {
     physical input integer battery
-    Coords position = (latitude = 5.0, longitude = 2.0)
-    Coords help = (latitude = -1.0, longitude = -1.0)
+    Coords position = (latitude = 5, longitude = 2)
+    Coords help = (latitude = -1, longitude = -1)
     logical string mode = "measure"
     logical string node = "droneC"
-    logical decimal threshold = 7.0
+    logical integer threshold = 7
 } has batteryCheck setRescue
 
 droneD : "A robot taking measurements" {
     physical input integer battery
-    Coords position = (latitude = 5.0, longitude = 5.0)
-    Coords help = (latitude = -1.0, longitude = -1.0)
+    Coords position = (latitude = 5, longitude = 5)
+    Coords help = (latitude = -1, longitude = -1)
     logical string mode = "measure"
     logical string node = "droneD"
-    logical decimal threshold = 6.0
+    logical integer threshold = 6
 } has batteryCheck setRescue
 
 \@
@@ -51,7 +51,8 @@ droneD : "A robot taking measurements" {
 rule batteryCheck
     on battery
     for all (battery < 5 and ext.battery > 80)
-        do ext.help[latitude] = position[latitude]; ext.help[longitude] = position[longitude
+        do ext.help[latitude] = position[latitude];
+           ext.help[longitude] = position[longitude]
 
 rule setRescue 
     on help[latitude] help[longitude]
@@ -59,6 +60,5 @@ rule setRescue
         diffLatitude := (position[latitude] - help[latitude]);
         diffLongitude := (position[longitude] - help[longitude])
       in
-    for (absdec diffLatitude) < threshold and (absdec diffLongitude) < threshold
+    for (absint diffLatitude < threshold and absint diffLongitude < threshold)
         do mode = "rescue"
-
