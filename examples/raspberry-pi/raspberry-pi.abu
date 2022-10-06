@@ -1,0 +1,67 @@
+# AbU custom types declaration.
+
+define DCMotor as {
+	forwardPin : physical output integer
+	backwardPin : physical output integer
+	forwardPace : logical integer
+	backwardPace : logical integer
+}
+define GPIOButton as {
+	pin : physical output integer
+	status : logical boolean
+}
+define LED as {
+	pin : physical output integer
+	status : logical boolean
+}
+
+# AbU devices definition.
+
+wheel : "A brushed DC motor with L293 driver" {
+	DCMotor motor = (forwardPin = 13, backwardPin = 11,
+						forwardPace = 0, backwardPace = 0)
+	logical string node = "DCmotor"
+	where not (motor[forwardPace] > 0 and
+				motor[backwardPace] > 0)
+} has drive brake
+
+controls : "A device managing LEDs and buttons" {
+	# Two simple one color LEDs
+	LED ledOne = (pin = 36, status = false)
+	LED ledTwo = (pin = 37, status = false)
+	# Two GPIO on\off buttons
+	GPIOButton buttonA = (pin = 38, status = false)
+	GPIOButton buttonB = (pin = 40, status = false)
+	logical string node = "LEDsAndButtons"
+} has changeDirection toggleLed
+
+# AbU (ECA) rules definition.
+
+rule changeDirection on buttonA[status] buttonB[status]
+	for all (ext.node == "DCmotor" and buttonA[status]
+				and not buttonB[status])
+		do ext.motor[forwardPace] = 0;
+			ext.motor[backwardPace] = 1
+	for all (ext.node == "DCmotor" and buttonB[status]
+				and not buttonA[status])
+		do ext.motor[forwardPace] = 1;
+			ext.motor[backwardPace] = 0
+
+rule toggleLed on buttonA[status] buttonB[status]
+	for (buttonA[status] and buttonB[status])
+		do ledOne[status] = not ledOne[status];
+			ledTwo[status] = not ledTwo[status]
+
+rule drive on motor[forwardPace] motor[backwardPace]
+	for (motor[forwardPace] > 0 and
+		  motor[forwardPace] < 255)
+		do motor[forwardPace] = motor[forwardPace] + 30
+	for (motor[backwardPace] > 0 and
+		  motor[backwardPace] < 255)
+		do motor[backwardPace] = motor[backwardPace] + 30
+
+rule brake on motor[forwardPace] motor[backwardPace]
+	for (motor[forwardPace] >= 255)
+		do motor[forwardPace] = 0
+	for (motor[backwardPace] >= 255)
+		do motor[backwardPace] = 0

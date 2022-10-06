@@ -1,0 +1,33 @@
+{
+    "Imports": ["gobot.io/x/gobot/platforms/raspi"],
+    "AdditionalFiles": ["customResources.go"],
+    "StateInitializer": "MakeCustomResources(raspi.NewAdaptor())",
+    "Mappings": {
+        "DCMotor": {
+            "GoabuType": "L293Motor",
+            "Fields": {
+                "forwardPin": "fPin",
+                "backwardPin": "bPin",
+                "forwardPace": "fSpeed",
+                "backwardPace": "bSpeed"
+            },
+            "Args": ["forwardPin", "backwardPin"]
+        },
+        "GPIOButton":{
+            "GoabuType": "Button",
+            "Fields": {
+                "pin" : "pin",
+                "status": "pressed"
+            },
+            "Args": ["pin"]
+        },
+        "LED":{
+            "GoabuType": "Led",
+            "Fields": {
+                "pin" : "pin",
+                "status": "active"
+            },
+            "Args": ["pin", "status"]
+        }
+    }
+}
