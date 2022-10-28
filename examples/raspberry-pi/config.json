@@ -11,7 +11,7 @@
                 "forwardPace": "fSpeed",
                 "backwardPace": "bSpeed"
             },
-            "Args": ["forwardPin", "backwardPin"]
+            "Args": ["forwardPin", "backwardPin", "forwardPace", "backwardPace"]
         },
         "GPIOButton":{
             "GoabuType": "Button",
@@ -19,7 +19,7 @@
                 "pin" : "pin",
                 "status": "pressed"
             },
-            "Args": ["pin"]
+            "Args": ["pin", "status"]
         },
         "LED":{
             "GoabuType": "Led",
