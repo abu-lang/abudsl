@@ -132,7 +132,7 @@ An ECA rule ***task*** is of the form:
 > `for` **[** `all` **]** *Condition* <br>
       &emsp;&emsp;`do` *Action*
 
-where *Condition* is a boolean expression and *Action* is a list of semicolon-separated list of resource assignments. When *Condition* is satisfied, then the assignments in *Action* are performed. For instance:
+where *Condition* is a boolean expression and *Action* is a list of comma-separated list of resource assignments. When *Condition* is satisfied, then the assignments in *Action* are performed. For instance:
 ```
 for (2 + 0.5 * temperature < humidity and 38 - temperature < humidity)
     do conditioning = true
@@ -146,6 +146,12 @@ rule dry
     for (2 + 0.5 * temperature < humidity and 38 - temperature < humidity)
         do conditioning = true
 ```
+
+An *Action* may perform multiple assignments, atomically executed. For instance:
+```
+do x = 4, y = 1 
+```
+yields a list of updates that, when commited, will simultaneously modify both resources `x` and `y`.
 
 #### External tasks
 
