@@ -30,6 +30,7 @@ In the following, we denote with **(** *exp* **)*** zero or more repetitions of 
 *BooleanExpression* &nbsp;**::=**&nbsp; *BooleanValue* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *LocalResourceAccess* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *RemoteResourceAccess* <br>
+  &emsp;&emsp;&emsp; **|**&nbsp; *ForeignFunction* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `(` *BooleanExpression* `)` <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `not` *BooleanExpression* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *BooleanExpression* `and` *BooleanExpression* <br>
@@ -44,6 +45,7 @@ In the following, we denote with **(** *exp* **)*** zero or more repetitions of 
 *NumericExpression* &nbsp;**::=**&nbsp; *NumericValue* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *LocalResourceAccess* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *RemoteResourceAccess* <br>
+  &emsp;&emsp;&emsp; **|**&nbsp; *ForeignFunction* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `(` *NumericExpression* `)` <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `absint` *NumericExpression* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `absdec` *NumericExpression* <br>
@@ -55,7 +57,11 @@ In the following, we denote with **(** *exp* **)*** zero or more repetitions of 
 *StringExpression* &nbsp;**::=**&nbsp; *StringValue* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *LocalResourceAccess* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *RemoteResourceAccess* <br>
+  &emsp;&emsp;&emsp; **|**&nbsp; *ForeignFunction* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *StringExpression* `::` *StringExpression* <br>
+*ForeignFunction* &nbsp;**::=**&nbsp; `foreign (` *StringValue* `)` **|** `foreign (` *StringValue* **(** `,` *Param* **)<sup>+</sup>** `)` <br>
+*Param* &nbsp;**::=**&nbsp; *Value* **|** *LocalResourceAccess* <br>
+
 
 ## Syntax for values, types and identifiers
 >*ResourceId* &nbsp;**::=**&nbsp; *Identifier* <br>
