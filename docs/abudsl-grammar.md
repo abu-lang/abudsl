@@ -26,8 +26,10 @@ In the following, we denote with **(** *exp* **)*** zero or more repetitions of 
 
 ## Syntax for expressions and conditions
 >*Expression* &nbsp;**::=**&nbsp; *BooleanExpression* **|** *NonBooleanExpression* <br>
+*Condition* &nbsp;**::=**&nbsp; *BooleanExpression* <br>
 *BooleanExpression* &nbsp;**::=**&nbsp; *BooleanValue* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *LocalResourceAccess* <br>
+  &emsp;&emsp;&emsp; **|**&nbsp; *RemoteResourceAccess* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `(` *BooleanExpression* `)` <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `not` *BooleanExpression* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *BooleanExpression* `and` *BooleanExpression* <br>
@@ -41,6 +43,7 @@ In the following, we denote with **(** *exp* **)*** zero or more repetitions of 
 *NonBooleanExpression* &nbsp;**::=**&nbsp; *NumericExpression* **|** *StringExpression* <br>
 *NumericExpression* &nbsp;**::=**&nbsp; *NumericValue* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *LocalResourceAccess* <br>
+  &emsp;&emsp;&emsp; **|**&nbsp; *RemoteResourceAccess* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `(` *NumericExpression* `)` <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `absint` *NumericExpression* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; `absdec` *NumericExpression* <br>
@@ -51,20 +54,8 @@ In the following, we denote with **(** *exp* **)*** zero or more repetitions of 
   &emsp;&emsp;&emsp; **|**&nbsp; *NumericExpression* `%` *NumericExpression* <br>
 *StringExpression* &nbsp;**::=**&nbsp; *StringValue* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *LocalResourceAccess* <br>
-  &emsp;&emsp;&emsp; **|**&nbsp; *StringExpression* `::` *StringExpression* <br>
-*Condition* &nbsp;**::=**&nbsp; *BooleanValue* <br>
-  &emsp;&emsp;&emsp; **|**&nbsp; *LocalResourceAccess* <br>
   &emsp;&emsp;&emsp; **|**&nbsp; *RemoteResourceAccess* <br>
-  &emsp;&emsp;&emsp; **|**&nbsp; `(` *BooleanExpression* `)` <br>
-  &emsp;&emsp;&emsp; **|**&nbsp; `not` *BooleanExpression* <br>
-  &emsp;&emsp;&emsp; **|**&nbsp; *BooleanExpression* `and` *BooleanExpression* <br>
-  &emsp;&emsp;&emsp; **|**&nbsp; *BooleanExpression* `or` *BooleanExpression* <br>
-  &emsp;&emsp;&emsp; **|**&nbsp; *NonBooleanExpression* `==` *NonBooleanExpression* <br>
-  &emsp;&emsp;&emsp; **|**&nbsp; *NonBooleanExpression* `!=` *NonBooleanExpression* <br>
-  &emsp;&emsp;&emsp; **|**&nbsp; *NonBooleanExpression* `<` *NonBooleanExpression* <br>
-  &emsp;&emsp;&emsp; **|**&nbsp; *NonBooleanExpression* `<=` *NonBooleanExpression* <br>
-  &emsp;&emsp;&emsp; **|**&nbsp; *NonBooleanExpression* `>` *NonBooleanExpression* <br>
-  &emsp;&emsp;&emsp; **|**&nbsp; *NonBooleanExpression* `>=` *NonBooleanExpression* <br>
+  &emsp;&emsp;&emsp; **|**&nbsp; *StringExpression* `::` *StringExpression* <br>
 
 ## Syntax for values, types and identifiers
 >*ResourceId* &nbsp;**::=**&nbsp; *Identifier* <br>
