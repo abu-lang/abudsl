@@ -18,11 +18,11 @@ In the following, we denote with **(** *exp* **)*** zero or more repetitions of 
   &emsp;&emsp;&emsp; **|**&nbsp; `rule` *RuleId* `on` *Event* `let` *LetDeclaration* `in` **(** *Task* **)<sup>+</sup>** <br>
 *Event* &nbsp;**::=**&nbsp; **(** *ResourceId* **|** *ResourceId `[` *ResourceId* `]` **)<sup>+</sup>** <br>
 *Task* &nbsp;**::=**&nbsp; `for` **[** `all` **]** *Condition* `do` *Action* <br>
-*Action* &nbsp;**::=**&nbsp; *Assignment* **(** `;` *Assignment* **)*** <br>
+*Action* &nbsp;**::=**&nbsp; *Assignment* **(** `,` *Assignment* **)** * <br>
 *Assignment* &nbsp;**::=**&nbsp; *LocalResourceAccess* `=` *Expression* **|** *RemoteResourceAccess* `=` *Expression* <br>
 *LocalResourceAccess* &nbsp;**::=**&nbsp; **[** `this.` **]** *ResourceId* **|**  **[** `this.` **]** *ResourceId* `[` ResourceId `]` <br>
 *RemoteResourceAccess* &nbsp;**::=**&nbsp; `ext.` *ResourceId* **|** `ext.` *ResourceId* `[` ResourceId `]` <br>
-*LetDeclaration* &nbsp;**::=**&nbsp; *ResourceId* `:=` *Expression* **( `;`** *ResourceId* `:=` *Expression* **)*** <br>
+*LetDeclaration* &nbsp;**::=**&nbsp; *ResourceId* `:=` *Expression* **( `;`** *ResourceId* `:=` *Expression* **)** * <br>
 
 ## Syntax for expressions and conditions
 >*Expression* &nbsp;**::=**&nbsp; *BooleanExpression* **|** *NonBooleanExpression* <br>
