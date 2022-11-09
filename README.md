@@ -151,7 +151,7 @@ An *Action* may perform multiple assignments, atomically executed. For instance:
 ```
 do x = 4, y = 1 
 ```
-yields a list of updates that, when commited, will simultaneously modify both resources `x` and `y`.
+yields a list of updates that, when committed, will simultaneously modify both resources `x` and `y`.
 
 #### External tasks
 
