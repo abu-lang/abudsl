@@ -51,7 +51,7 @@ droneD : "A robot taking measurements" {
 rule batteryCheck
     on battery
     for all (battery < 5 and ext.battery > 80)
-        do ext.help[latitude] = position[latitude];
+        do ext.help[latitude] = position[latitude],
            ext.help[longitude] = position[longitude]
 
 rule setRescue 

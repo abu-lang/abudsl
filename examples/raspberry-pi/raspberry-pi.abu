@@ -40,16 +40,16 @@ controls : "A device managing LEDs and buttons" {
 rule changeDirection on buttonA[status] buttonB[status]
 	for all (ext.node == "DCmotor" and buttonA[status]
 				and not buttonB[status])
-		do ext.motor[forwardPace] = 0;
+		do ext.motor[forwardPace] = 0,
 			ext.motor[backwardPace] = 1
 	for all (ext.node == "DCmotor" and buttonB[status]
 				and not buttonA[status])
-		do ext.motor[forwardPace] = 1;
+		do ext.motor[forwardPace] = 1,
 			ext.motor[backwardPace] = 0
 
 rule toggleLed on buttonA[status] buttonB[status]
 	for (buttonA[status] and buttonB[status])
-		do ledOne[status] = not ledOne[status];
+		do ledOne[status] = not ledOne[status],
 			ledTwo[status] = not ledTwo[status]
 
 rule drive on motor[forwardPace] motor[backwardPace]
