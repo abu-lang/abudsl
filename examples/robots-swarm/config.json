@@ -1,0 +1,14 @@
+{
+    "AdditionalFiles": ["coordsResources.go"],
+    "StateInitializer": "MakeCoordsResources()",
+    "Mappings": {
+        "Coords": {
+            "GoabuType": "coords",
+            "Fields": {
+                "latitude": "lat",
+                "longitude": "lon"
+            },
+            "Args": ["latitude", "longitude"]
+        }
+    }
+}
