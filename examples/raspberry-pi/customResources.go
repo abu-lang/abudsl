@@ -103,7 +103,8 @@ func MakeButton(adaptor physical.IOadaptor, name string, args ...interface{}) (p
 	resources := memory.MakeResources()
 	resources.Bool["pressed"] = pressed
 	resources.Integer["pin"] = int64(pin)
-	return Button{name: name,
+	return Button{
+		name:         name,
 		startPressed: pressed,
 		driver:       gpio.NewButtonDriver(adaptor, strconv.Itoa(pin)),
 	}, resources, nil
@@ -128,8 +129,8 @@ func (b Button) Modified(adaptor physical.IOadaptor, name string, resources memo
 func (b Button) getButtonInput(in chan<- string, errs chan<- error) {
 	events := b.driver.Subscribe()
 	status := b.startPressed
-	push := b.name + "_pressed = true;"
-	release := b.name + "_pressed = false;"
+	push := b.name + "_pressed = true,"
+	release := b.name + "_pressed = false,"
 	event := <-events
 	for {
 		var inputs chan<- string = nil
